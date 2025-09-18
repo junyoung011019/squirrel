@@ -72,7 +72,7 @@ jobs:
 
       # 7. Amazon ECS에 새 작업 정의 배포
       - name: Deploy Amazon ECS task definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v3
         with:
           task-definition: ${{ steps.render-task-definition.outputs.task-definition }}
           service: ${{ env.ECS_SERVICE_NAME }}
