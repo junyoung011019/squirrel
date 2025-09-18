@@ -15,7 +15,7 @@ env:
   
   # ECS 관련 정보
   ECS_CLUSTER_NAME: lambda-squirrel-cluster # 본인의 ECS 클러스터 이름
-  ECS_SERVICE_NAME: lambda-squirrel-service # 본인의 ECS 서비스 이름
+  ECS_SERVICE_NAME: lambda-squirrel-dev-service # 본인의 ECS 서비스 이름
   ECS_TASK_DEFINITION: lambda-squirrel-dev-task # 본인의 ECS 작업 정의 이름 (JSON 파일명)
   CONTAINER_NAME: word-service # 작업 정의 안의 컨테이너 이름
 
