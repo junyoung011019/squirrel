@@ -1,0 +1,20 @@
+# .dockerignore
+
+# Git 폴더
+.git
+
+# IDE 설정 폴더
+.idea/
+.vscode/
+*.iml
+
+# 로컬에서 생성된 빌드 폴더 및 캐시
+build/
+.gradle/
+
+# 운영체제 파일
+.DS_Store
+Thumbs.db
+
+# 기타 민감 정보 파일
+.env
