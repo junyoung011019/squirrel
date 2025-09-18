@@ -18,7 +18,7 @@ FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 LABEL maintainer="junyoung"
 
-COPY --from=builder /app/word-service/build/libs/*.jar /app/app.jar
+COPY --from=builder /app/build/libs/*.jar /app/app.jar
 
 EXPOSE 8080
 
