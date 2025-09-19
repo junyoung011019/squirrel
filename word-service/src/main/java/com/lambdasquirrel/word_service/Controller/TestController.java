@@ -17,4 +17,10 @@ public class TestController {
     public String lastTest(){
         return "lastTest?";
     }
+
+    @GetMapping("/lastTest")
+    public String lastTest1(){
+        return "lastTest";
+    }
+}
 }
