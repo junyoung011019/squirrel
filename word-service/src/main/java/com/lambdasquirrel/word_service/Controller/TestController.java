@@ -12,4 +12,9 @@ public class TestController {
     public String test(){
         return "good~~ plz!!!";
     }
+
+    @GetMapping("/test1")
+    public String lastTest(){
+        return "lastTest?";
+    }
 }
