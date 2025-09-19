@@ -10,7 +10,7 @@ COPY . .
 RUN chmod +x ./gradlew
 
 # Gradle 빌드 실행
-RUN ./gradlew clean build --no-daemon -x test
+RUN ./gradlew :word-service:clean :word-service:build --no-daemon -x test
 
 ## 런타임 단계
 FROM eclipse-temurin:21-jre-alpine
