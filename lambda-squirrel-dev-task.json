@@ -26,14 +26,14 @@
             "volumesFrom": []
         }
     ],
-    "cpu": "512",
+    "cpu": "1024",
     "enableFaultInjection": false,
     "executionRoleArn": "arn:aws:iam::664247613948:role/ecsTaskExecutionRole",
     "family": "lambda-squirrel-dev-task",
-    "memory": "1024",
+    "memory": "3072",
     "networkMode": "awsvpc",
     "placementConstraints": [],
-    "registeredAt": "2025-09-18T01:42:10.506Z",
+    "registeredAt": "2025-09-19T00:12:56.720Z",
     "registeredBy": "arn:aws:iam::664247613948:root",
     "requiresAttributes": [
         {
@@ -52,13 +52,13 @@
     "requiresCompatibilities": [
         "FARGATE"
     ],
-    "revision": 1,
+    "revision": 7,
     "runtimePlatform": {
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
     },
     "status": "ACTIVE",
-    "taskDefinitionArn": "arn:aws:ecs:ap-northeast-2:664247613948:task-definition/lambda-squirrel-dev-task:1",
+    "taskDefinitionArn": "arn:aws:ecs:ap-northeast-2:664247613948:task-definition/lambda-squirrel-dev-task:7",
     "volumes": [],
     "tags": []
 }
