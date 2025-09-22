@@ -4,6 +4,4 @@ rootProject.name = 'lambda-squirrel'
 
 // 이 부모 프로젝트가 어떤 하위 프로젝트(모듈)들을 포함하는지 알려줍니다.
 include 'word-service'
-
-// 나중에 user-service를 만들면 아래 줄을 추가하면 됩니다.
-// include 'user-service'
+include 'user-service'

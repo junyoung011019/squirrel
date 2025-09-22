@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.5.5'
+	id 'org.springframework.boot' version '3.5.6'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
@@ -19,10 +19,12 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	implementation("org.springframework.boot:spring-boot-starter-web:3.5.5")
+	runtimeOnly("software.amazon.awssdk:bom:2.34.0")
+	implementation("software.amazon.awssdk:cognitoidentityprovider:2.34.0")
+	implementation("org.projectlombok:lombok:1.18.30")
 }
 
 tasks.register("prepareKotlinBuildScriptModel"){}
