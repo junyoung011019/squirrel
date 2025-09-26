@@ -1,0 +1,40 @@
+/lambda-squirrel-storage (S3 Bucket)
+│
+└─ /contents/
+    ├── /daily/
+    │		   ├── /video/
+    |       |     └── daily_01.mp4
+    │       |     └── daily_02.mp4     
+    │       │     └── daily_03.mp4 
+    │       │
+    │		   ├── /audio/
+    |       |     └── daily_01_prompt.mp3
+    |       |     └── daily_01_recommend.mp3
+    │       |     └── daily_02_prompt.mp3
+    |       |     └── daily_02_recommend.mp3     
+    │		   │     └── daily_03_prompt.mp3
+    |		   |     └── daily_03_recommend.mp3 
+    │		   │      
+ 	 │		   └── /final/
+    |            └── daily_final_01.mp4
+    │            └── daily_final_02.mp4     
+    │            └── daily_final_03.mp4
+    │
+    └── /cafe/
+ 		      ├── /video/
+            |     └── cafe_01.mp4
+            |     └── cafe_02.mp4     
+            │     └── cafe_03.mp4 
+            │
+ 		      ├── /voice/
+            |     └── cafe_01_prompt.mp3
+            |     └── cafe_01_recommend.mp3
+            |     └── cafe_02_prompt.mp3     
+            |     └── cafe_02_recommend.mp3     
+            │     └── cafe_03_prompt.mp3
+            │     └── cafe_03_recommend.mp3 
+            │      
+ 		      └── /final/
+                  └── cafe_final_01.mp4
+                  └── cafe_final_02.mp4     
+                  └── cafe_final_03.mp4
