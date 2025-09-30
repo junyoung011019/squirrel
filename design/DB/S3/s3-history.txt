@@ -1,0 +1,20 @@
+/lambda-squirrel-storage (S3 Bucket)
+│
+└── /user/
+    └── /junyoung/
+         ├── /daily/
+         |     └── daily1-1asd134.mp3
+         |     └── daily1-1asd134-feedback.mp3
+         |     └── daily1-qssd161.mp3
+         |     └── daily1-qssd161-feedback.mp3
+         |     └── daily2-rwe2344.mp3
+         |     └── daily2-rwe2344-feedback.mp3
+         |     └── daily2-dfkpsdp.mp3
+         |     └── daily2-dfkpsdp-feedback.mp3
+         |
+         │
+         └── /cafe/
+               └── cafe1-asd2313.mp3
+               └── cafe1-asd2313-feedback.mp3
+               └── cafe2-xcv3522.mp3
+               └── cafe2-xcv3522-feedback.mp3  

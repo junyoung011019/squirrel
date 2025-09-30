@@ -1,0 +1,44 @@
+[
+    {
+        "lang": "JAPANESE",                     
+        "SK": "THEME#일상",                     
+        "themeName": "일상",
+        "description": "일상에서 사용하는 표현을 배워보세요."
+    },
+    {
+        "lang": "JAPANESE",
+        "SK": "THEME#일상#VIDEO#1",
+        "title": "아침인사하기",
+        "s3Url": "s3://.../daily/daily_01.mp4",
+                
+        "scene":{
+            "speaker":"ふさひと(코쇼) - 남자",       
+            "lang-script":"おはようございます",
+            "ko-script":"좋은 아침입니다",
+            "atmosphere":"A bright, sunny morning in a cozy living room, warm sunlight streaming through the window."
+        },
+        "recommend":{
+            "script":"おはようございます！いい天気ですね。",
+            "ko-script":"좋은 아침입니다! 날씨 좋네요.",
+            "s3Url":"s3://.../daily/daily_01_recommend.mp3"
+        }
+    },
+    {
+        "lang": "JAPANESE",
+        "SK": "THEME#일상#VIDEO#2",              
+        "title": "점심인사하기",
+        "s3Url": "s3://.../daily_02.mp4",
+            
+        "scene":{
+            "speaker":"なゆは(나유하) - 여자",
+            "lang-script":"お昼ご飯はいかがですか？",
+            "ko-script":"점심 식사는 어떠세요?",
+            "atmosphere":"A bustling but friendly office cafeteria during lunchtime, people chatting."
+        },
+        "recommend":{
+            "script":"ありがとうございます！ちょうど行きたいお店があったんです。",
+            "ko-script":"감사합니다! 마침 가고 싶었던 가게가 있었어요.",
+            "s3Url":"s3://.../daily/daily_02_recommend.mp3"
+        }
+    }
+]

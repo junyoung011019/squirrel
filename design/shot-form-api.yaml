@@ -1,0 +1,328 @@
+openapi: 3.0.0
+
+# ------------------------------------
+# API 기본 정보
+# ------------------------------------
+info:
+  title: 찍고 말해 API
+  version: 1.0.0
+  description: 찍고 말해(가칭) API 명세서 - Draft ver. 2025.09.30
+  contact:
+    name: "Lambda Squirrel"
+    email: jungjunyoung1019@gmail.com
+
+# ------------------------------------
+# API 서버 주소 정의
+# ------------------------------------
+servers:
+  - url: http://localhost:8080
+    description: 로컬 개발 서버
+  - url: https://lambda-squirrel.shop
+    description: 개발 환경 서버
+
+# ------------------------------------
+# API 그룹화를 위한 태그 목록
+# ------------------------------------
+tags:
+  - name: Short-Form-Creation
+    description: "[관리자용] 숏폼 생성"
+  - name: Short-Form-Study
+    description: 숏폼 콘텐츠 활용 및 학습 API
+
+# ------------------------------------
+# 숏폼 생성
+# ------------------------------------
+paths:
+  /api/v1/short-forms:
+    post:
+      tags:
+        - Short-Form-Creation
+      summary: 숏폼 생성
+      description: 학습 가능한 숏폼 영상을 생성합니다.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        description: 새로 생성할 숏폼 영상의 정보
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - themeId
+                - language
+                - count
+              properties:
+                themeId:
+                  type: string
+                  description: "영상을 생성할 테마의 ID입니다. 사용 가능한 전체 테마 목록은 'GET /api/v1/short-form/theme-list' API를 통해 조회할 수 있습니다."
+                  example: "cafe"
+                language:
+                  type: string
+                  description: 영상을 생성할 언어 및 성별
+                  example: "JAPANESE_MALE"
+                count:
+                  type: integer
+                  description: 생성할 영상의 갯수
+                  example: 5
+      responses:
+        '202':
+          description: 요청이 성공적으로 접수되었으며, 비동기 처리를 시작함
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jobIds:
+                    type: array
+                    description: 생성된 비동기 작업 ID 목록
+                    items:
+                      type: string
+                      description: 처리 상태를 조회할 수 있는 개별 작업 ID
+                    example:
+                      - "d290f1ee-6c54-4b01-90e6-d701748f0851"
+                      - "f3a12b9c-8d7e-4f6a-9b3c-1a2b3c4d5e6f"
+                      - "a9b8c7d6-e5f4-a3b2-c1d0-e9f8a7b6c5d4"
+                      - "12345678-abcd-efgh-ijkl-mnopqrstuvwx"
+                      - "zyxwutsr-qpon-mlkj-ihgfe-dcba98765432"
+        '401':
+          description: 인증 실패 (토큰 없음 또는 만료)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                errorCode: "UNAUTHENTICATED"
+                message: "토큰이 없거나 만료 되었습니다."
+        '500':
+          description: 서버 내부 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                errorCode: "INTERNAL_SERVER_ERROR"
+                message: "서버 내부 오류"
+
+# ------------------------------------
+# 숏폼 콘텐츠 활용 및 학습 API
+# ------------------------------------
+
+  /api/v1/short-form/themes:
+    get:
+      tags:
+        - Short-Form-Study
+      summary: 숏폼 테마 리스트 조회
+      description: 저장된 테마 리스트를 확인합니다.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: 성공적으로 처리함
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  themeList:
+                    type: array
+                    description: 저장된 테마 리스트
+                    items:
+                      $ref: '#/components/schemas/Theme'
+                    example:
+                      - themeId: "cafe"
+                        description: "카페에서 음료를 주문하고 대화하는 법을 배워요."
+                      - themeId: "library"
+                        description: "도서관에서 책을 빌리고 반납하는 법을 배워요."
+                      - themeId: "airport"
+                        description: "공항에서 체크인하고 길을 묻는 법을 배워요."
+                      - themeId: "hospital"
+                        description: "병원에서 증상을 설명하고 진료를 예약해요."
+                      - themeId: "school"
+                        description: "학교 생활과 수업에 관련된 표현을 익혀요."
+                      - themeId: "park"
+                        description: "공원에서 산책하며 날씨에 대해 이야기해요."
+                      - themeId: "mart"
+                        description: "마트에서 물건을 찾고 가격을 계산해요."
+                      - themeId: "restaurant"
+                        description: "식당에서 음식을 주문하고 요청사항을 말해요."
+                      - themeId: "bank"
+                        description: "은행에서 계좌를 개설하고 송금하는 법을 배워요."
+                      - themeId: "pharmacy"
+                        description: "약국에서 증상에 맞는 약을 구매해요."
+                      - themeId: "department_store"
+                        description: "백화점에서 쇼핑하며 사이즈와 색상을 문의해요."
+                      - themeId: "cinema"
+                        description: "영화관에서 표를 예매하고 좌석을 찾아요."
+                      - themeId: "subway"
+                        description: "지하철 노선을 묻고 교통카드를 충전해요."
+                      - themeId: "bus"
+                        description: "버스 정류장을 찾고 목적지를 말해요."
+                      - themeId: "convenience_store"
+                        description: "편의점에서 필요한 물건을 구매하고 결제해요."
+                      - themeId: "post_office"
+                        description: "우체국에서 소포나 편지를 보내는 법을 배워요."
+                      - themeId: "hair_salon"
+                        description: "미용실에서 원하는 헤어스타일을 설명해요."
+                      - themeId: "gym"
+                        description: "헬스장에서 운동 기구 사용법을 문의해요."
+                      - themeId: "bookstore"
+                        description: "서점에서 원하는 책을 찾고 추천을 받아요."
+                      - themeId: "museum"
+                        description: "박물관에서 작품에 대해 질문하고 설명을 들어요."
+        '401':
+          description: 인증 실패 (토큰 없음 또는 만료)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                errorCode: "UNAUTHENTICATED"
+                message: "토큰이 없거나 만료 되었습니다."
+
+  /api/v1/short-form/theme/{lang}/{themeId}:
+    get:
+      tags:
+        - Short-Form-Study
+      summary: 특정 테마의 숏폼 영상 목록 조회
+      description: 파라미터로 입력 받은 언어와 테마명에 해당하는 모든 숏폼 영상 리스트를 반환합니다.
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: lang
+        in: path
+        required: true
+        description: 조회할 언어
+        schema:
+          type: string
+          example: "jp-male"
+      - name: themeId
+        in: path
+        required: true
+        description: 조회할 테마명
+        schema:
+          type: string
+          example: "cafe"
+      responses:
+        '200':
+          description: 성공적으로 처리함
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    videos:
+                      type: array
+                      description: 저장된 숏폼 리스트
+                      items:
+                        $ref: '#/components/schemas/ShortFromVideo'
+                      example:
+                        - videoId: "THEME#카페#VIDEO#1"
+                          title: "인사하기"
+                          s3Url: "s3://.../daily/daily_01.mp4"
+                          scence:
+                            speakar: "ふさひと(코쇼) - 남자"
+                            lang-script: "こんにちは。おはようございます"
+                            ko-script: "안녕하세요. 좋은 아침입니다"
+                        - videoId: "THEME#카페#VIDEO#2"
+                          s3Url: "s3://.../daily/daily_02.mp4"
+                          scence:
+                            speakar: "なゆは(나유하) - 여자"
+                            lang-script: "何を注文しますか？"
+                            ko-script: "무엇을 주문하시겠습니까?"
+                        - videoName: "THEME#카페#VIDEO#3"
+                          title: "추가 주문하기"
+                          s3Url: "s3://.../daily/daily_03.mp4"
+                          scence:
+                            speakar: "ゆうま(유우마) - 남자"
+                            lang-script: "もっと必要なものはありませんか？"
+                            ko-script: "더 필요하신건 없으신가요?"
+                  
+        '401':
+          description: 인증 실패 (토큰 없음 또는 만료)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                errorCode: "UNAUTHENTICATED"
+                message: "토큰이 없거나 만료 되었습니다."
+
+  /api/v1/short-form/study:
+    get:
+      tags:
+        - Short-Form-Study
+      summary: 음성 입력 
+      description: 숏폼 영상에 대해 한국어/외국어로 음성을 입력합니다.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        description: 새로 생성할 숏폼 영상의 정보
+        content:
+          application/json:
+            schema:
+              type: object
+          
+      responses:
+        '200':
+          description: "소켓 도입을 통한 추후 작성"
+  
+
+# ------------------------------------
+# 재사용 가능한 컴포넌트 정의
+# ------------------------------------
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Theme:
+      type: object
+      properties:
+        themeId:
+          type: string
+          description: 테마의 문자열 ID (slug)
+          example: "cafe"
+        description:
+          type: string
+          description: 테마에 대한 간단한 설명
+          example: "카페에서 음료를 주문하고 대화하는 법을 배워요."
+
+    ShortFromVideo:
+      type: object
+      properties:
+        videoId:
+          type: string
+          example: "THEME#일상#VIDEO#1"
+        title:
+          type: string
+          example: "인사하기"
+        s3Url:
+          type: string
+          example: "s3://.../daily/daily_final_01.mp4"
+        scene:
+          type: object
+          properties:
+            speaker:
+              type: string
+              example: "ふさひと(코쇼) - 남자"
+            script:
+              type: string
+              example: "こんにちは。おはようございます"
+            ko_script:
+              type: string
+              example: "안녕하세요. 좋은 아침입니다"
+    
+    ErrorResponse:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          description: 에러를 식별하는 고유 코드
+        message:
+          type: string
+          description: 에러에 대한 상세 설명
