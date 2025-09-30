@@ -35,33 +35,4 @@ out/
 
 ### VS Code ###
 .vscode/
-
-/src/main/resources/application.properties
-/src/main/resources/application.yml
-
-# Spring Boot log
-*.log
-
-# 일반 캐시
-*.tmp
-*.swp
-*.swo
-
-# 빌드 결과물
-target/
-build/
-
-# 실행 JAR
-*.jar
-*.war
-*.ear
-
-# 환경 변수 / 시크릿
 .env
-*.keystore
-*.jks
-*.pem
-*.p12
-*.crt
-*.key
-
