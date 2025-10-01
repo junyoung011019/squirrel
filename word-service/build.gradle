@@ -41,6 +41,9 @@ dependencies {
 //	implementation "software.amazon.awssdk:bedrockruntime" // Bedrock Runtime
 	implementation "software.amazon.awssdk:polly"
 	implementation "software.amazon.awssdk:dynamodb"
+	implementation "software.amazon.awssdk:dynamodb-enhanced"
+
+
 }
 
 

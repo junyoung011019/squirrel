@@ -13,28 +13,4 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TranslateService {
 
-    private final TranslateClient translateClient;
-
-    // Rekognition으로 인식한 객체 번역
-    public String translateWord(List<Label> engWord) {
-
-//        Label label = engWord.getFirst();
-//
-//        TranslateTextRequest request = TranslateTextRequest
-//                .builder()
-//                .text(label.name())
-//                .sourceLanguageCode("en") // 원본 언어
-//                .targetLanguageCode("ko") // 타겟 언어
-//                .build();
-//
-//
-//        TranslateTextResponse response = translateClient.translateText(request);
-//
-//        String korWord = response.translatedText();
-
-        // 임시 객체 번역
-        String korWord = "강아지";
-        return korWord;
-    }
-
 }
