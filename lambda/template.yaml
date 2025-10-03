@@ -1,0 +1,43 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  lambda-squirrel-backend
+
+Resources:
+  # --- 1. 회원가입 함수 정의 ---
+  TestFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: test/
+      Handler: app.lambda_handler
+      Runtime: python3.12
+      Timeout: 30
+      Events:
+        TestApi:
+          Type: Api
+          Properties:
+            Path: /test
+            Method: get
+      Environment:
+        Variables:
+          DB_HOST: linkbig-ht-01-lambda-squirrel-rds.czwmu86ms4yl.us-east-1.rds.amazonaws.com
+          DB_USER: admin
+          DB_PASSWORD: rdsqlalfqjsgh1234
+          DB_NAME: lambda-squirrel
+
+  # --- 2. 테스트 함수 1 정의 ---
+  Test1Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: test1/
+      Handler: app.lambda_handler
+      Runtime: python3.12
+      Events:
+        GetHistoryApi:
+          Type: Api
+          Properties:
+            Path: /test1
+            Method: get
+      Environment:
+        Variables:
+          env: env
