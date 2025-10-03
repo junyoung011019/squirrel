@@ -1,7 +1,0 @@
-// settings.gradle
-
-rootProject.name = 'lambda-squirrel'
-
-// 이 부모 프로젝트가 어떤 하위 프로젝트(모듈)들을 포함하는지 알려줍니다.
-include 'word-service'
-include 'user-service'
