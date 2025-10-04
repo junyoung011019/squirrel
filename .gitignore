@@ -1,37 +1,76 @@
-# # Gradle
-# Gradle 빌드 과정에서 생성되는 모든 파일 및 폴더 (컴파일된 클래스, JAR 파일 등)
-.gradle
+# ------------------------------------
+# 1. AWS SAM / Serverless Build Artifacts
+# ------------------------------------
+# SAM 빌드 및 패키징 과정에서 생성되는 모든 파일
+.aws-sam/
 build/
+dist/
+package/
+sam-output.yaml
+*.zip
+*.tar.gz
 
-# # IDEs
-# IntelliJ IDEA 관련 설정 파일 (사용자 개인의 설정이므로 공유하지 않음)
+# ------------------------------------
+# 2. Python Environment & Compilation
+# ------------------------------------
+# Python 컴파일 및 환경 파일
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.dll
+*.egg
+*.egg-info/
+.eggs/
+
+# 가상 환경 (Virtual Environment) 폴더
+venv/
+.venv/
+env/
+
+# Dependency 설치 폴더 (Lambda Layer 등에 사용되는 경우가 아니라면 제외)
+**/node_modules/
+**/__pycache__/
+
+# ------------------------------------
+# 3. IDEs and Editor Files
+# ------------------------------------
+# IntelliJ IDEA
 .idea/
 *.iml
 *.ipr
 *.iws
 out/
 
-# Visual Studio Code 관련 설정 파일
+# Visual Studio Code
 .vscode/
 
-# # Log Files
-# 애플리케이션 실행 중에 생성되는 로그 파일
-*.log
+# ------------------------------------
+# 4. Sensitive Information & Configuration
+# ------------------------------------
+# 민감 정보 및 로컬 설정 파일
+application.properties
+application-local.yml
+application-private.yml
+.env
+*.pem  # 개인 키 파일
+*.key  # 키 파일
 
-# # Operating System Files
+# ------------------------------------
+# 5. Log & Temporary Files
+# ------------------------------------
+*.log
+tmp/
+temp/
+
+# ------------------------------------
+# 6. Operating System Files
+# ------------------------------------
 # macOS 시스템 파일
 .DS_Store
 
 # Windows 시스템 파일
 Thumbs.db
 
-# # Sensitive Information
-application.properties
-application-local.yml
-application-private.yml
-.env
-
-# # Temporary Files
-# 기타 임시 파일이나 압축 파일
-*.zip
-*.tar.gz
+lambda/short-form/common

@@ -15,24 +15,76 @@ info:
 # API 서버 주소 정의
 # ------------------------------------
 servers:
-  - url: http://localhost:8080
+  - url: http://localhost:3000
     description: 로컬 개발 서버
-  - url: https://lambda-squirrel.shop
+  - url: https://fzsnpt9u2g.execute-api.us-east-1.amazonaws.com/dev
     description: 개발 환경 서버
 
 # ------------------------------------
 # API 그룹화를 위한 태그 목록
 # ------------------------------------
 tags:
+  - name: User
+    description: "사용자"
   - name: Short-Form-Creation
     description: "[관리자용] 숏폼 생성"
   - name: Short-Form-Study
     description: 숏폼 콘텐츠 활용 및 학습 API
 
 # ------------------------------------
-# 숏폼 생성
+# 회원가입
 # ------------------------------------
 paths:
+  /signUp:
+    post:
+      tags:
+        - User
+      summary: 회원가입
+      description: 회원 등록을 진행합니다.
+      requestBody:
+        required: true
+        description: 새로 가입할 회원 정보
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nickname
+                - gender
+              properties:
+                nickname:
+                  type: string
+                  description: "사용자의 닉네임 (중복 가능)"
+                  example: "테스트유저"
+                gender:
+                  type: string
+                  description: 학습에 필요한 성별
+                  example: "F/M"
+      responses:
+        '201':
+          description: 요청이 성공적으로 접수되었으며, 회원가입이 성공함
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 응답 메시지
+                    example: "User created successfully."
+                  uuid:
+                    type: string
+                    format: uuid
+                    description: 생성된 사용자의 고유 ID (UUID) -> 앱에서 저장
+                    example: "65bad05d-200f-415b-a26d-cbb2709d65f4"
+                  nickname:
+                    type: string
+                    description: 생성된 사용자의 닉네임
+                    example: "테스트 유저"
+
+# ------------------------------------
+# 숏폼 생성
+# ------------------------------------
   /api/v1/short-forms:
     post:
       tags:

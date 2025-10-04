@@ -1,0 +1,55 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'lambda-squirrel-backend'
+
+Globals:
+  Function:
+    Timeout: 30
+    Environment:
+      Variables:
+        DB_HOST: linkbig-ht-01-lambda-squirrel-rds.czwmu86ms4yl.us-east-1.rds.amazonaws.com
+        DB_USER: admin
+        DB_PASSWORD: rdsqlalfqjsgh1234
+        DB_NAME: lambda-squirrel
+
+
+Resources:
+  #데이터베이스 연동 레이어
+  DatabaseLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: common/
+      CompatibleRuntimes:
+        - python3.12
+
+  #테스트 함수
+  TestFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: TestFunction/
+      Handler: app.lambda_handler
+      Runtime: python3.12
+      Layers:
+       - !Ref DatabaseLayer
+      Events:
+        TestApi:
+          Type: Api
+          Properties:
+            Path: /test
+            Method: get
+
+  #회원가입 함수
+  SignUpFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: SignUpFunction/
+      Handler: app.lambda_handler
+      Runtime: python3.12
+      Layers:
+       - !Ref DatabaseLayer
+      Events:
+        TestApi:
+          Type: Api
+          Properties:
+            Path: /signUp
+            Method: post
