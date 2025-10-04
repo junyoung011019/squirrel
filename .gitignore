@@ -1,47 +1,26 @@
 # ------------------------------------
 # 1. AWS SAM / Serverless Build Artifacts
 # ------------------------------------
-# SAM 빌드 및 패키징 과정에서 생성되는 모든 파일
+# sam build 명령어 실행 시 생성되는 모든 파일
 .aws-sam/
-build/
-dist/
-package/
-sam-output.yaml
-*.zip
-*.tar.gz
 
 # ------------------------------------
 # 2. Python Environment & Compilation
 # ------------------------------------
-# Python 컴파일 및 환경 파일
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-*.so
-*.dll
-*.egg
-*.egg-info/
-.eggs/
-
 # 가상 환경 (Virtual Environment) 폴더
-venv/
 .venv/
+venv/
 env/
 
-# Dependency 설치 폴더 (Lambda Layer 등에 사용되는 경우가 아니라면 제외)
-**/node_modules/
-**/__pycache__/
+# Python 컴파일 및 캐시 파일
+__pycache__/
+*.pyc
 
 # ------------------------------------
 # 3. IDEs and Editor Files
 # ------------------------------------
 # IntelliJ IDEA
 .idea/
-*.iml
-*.ipr
-*.iws
-out/
 
 # Visual Studio Code
 .vscode/
@@ -50,12 +29,10 @@ out/
 # 4. Sensitive Information & Configuration
 # ------------------------------------
 # 민감 정보 및 로컬 설정 파일
-application.properties
-application-local.yml
-application-private.yml
 .env
-*.pem  # 개인 키 파일
-*.key  # 키 파일
+samconfig.toml
+*.pem
+*.key
 
 # ------------------------------------
 # 5. Log & Temporary Files
@@ -73,4 +50,10 @@ temp/
 # Windows 시스템 파일
 Thumbs.db
 
-lambda/short-form/common
+template.yaml
+
+common/python
+
+# common 폴더 안의 모든 것을 무시
+common/*
+lambda/user/common/*
