@@ -1,7 +1,8 @@
 import json
 import uuid
-from db import get_connection
 import datetime
+
+from db import get_connection
 
 CORS_HEADERS = {
     "Access-Control-Allow-Origin": "*",

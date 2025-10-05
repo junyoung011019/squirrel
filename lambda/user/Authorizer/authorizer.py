@@ -1,81 +1,82 @@
 import json
-import uuid
 from db import get_connection
-import datetime
-
-CORS_HEADERS = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, X-Amz-Date, Authorization, X-Api-Key, X-Amz-Security-Token"
-}
 
 def lambda_handler(event, context):
+    print("Event received by authorizer:", json.dumps(event))
 
-    if event.get("httpMethod") == "OPTIONS":
-        return {
-            "statusCode": 200,
-            "headers": CORS_HEADERS,
-            "body": json.dumps({"message": "CORS preflight OK"})
-        }
+    headers = event.get("headers", {}) or {}
+    lower_case_headers = {k.lower(): v for k, v in headers.items()}
+    # 이제 대소문자 걱정 없이 소문자로 값을 찾음
+    user_uuid = lower_case_headers.get("uuid")
+
+    if not user_uuid:
+        # 헤더에 UUID가 없을 경우 거부
+        return generate_policy("anonymous", "Deny", event["methodArn"], reason="Missing user_uuid header")
 
     connection = None
     cursor = None
+
     try:
-        request_body = json.loads(event.get("body", "{}"))
-        nickname = request_body.get("nickname")
-        gender = request_body.get("gender")
-        
-        # 닉네임이 없는 경우 에러 처리
-        if not nickname:
-            return {
-                "statusCode": 400, # Bad Request
-                "headers": CORS_HEADERS,
-                "body": json.dumps({"error": "Nickname is required."})
-            }
-        
-        # 성별이 없는 경우 에러 처리
-        if not gender or (gender not in ('M', 'F')):
-            return {
-                "statusCode": 400, # Bad Request
-                "headers": CORS_HEADERS,
-                "body": json.dumps({"error": "gender is required."})
-            }
-        
-        now = datetime.datetime.now()
-
         connection = get_connection()
-        cursor = connection.cursor()
+        cursor = connection.cursor(dictionary=True)
 
-        # --- DB 작업 수행 ---
-        new_uuid = str(uuid.uuid4())
+        # DB에서 uuid로 gender 조회
+        cursor.execute("SELECT gender FROM user WHERE uuid = %s", (user_uuid,))
+        user = cursor.fetchone()
 
-        query = "INSERT INTO user (nickname, uuid, gender, created_at) VALUES (%s, %s, %s, %s)"
-        
-        cursor.execute(query, (nickname, new_uuid, gender, now))
-        connection.commit()
+        if not user:
+            # uuid 존재하지 않음 → 접근 거부
+            return generate_policy(
+                principal_id=user_uuid,
+                effect="Deny",
+                resource=event["methodArn"],
+                reason="Invalid user_uuid"
+            )
 
-        return {
-            "statusCode": 201,
-            "headers": CORS_HEADERS,
-            "body": json.dumps({
-                "message": "User created successfully.",
-                "uuid": new_uuid,
-                "nickname": nickname
-            })
-        }
+        gender = user.get("gender")
+
+        # 성공 → uuid와 gender를 context에 담아 다음 Lambda로 전달
+        return generate_policy(
+            principal_id=user_uuid,
+            effect="Allow",
+            resource=event["methodArn"],
+            reason="Authorized",
+            extra_context={"user_uuid": user_uuid, "gender": gender}
+        )
 
     except Exception as e:
-        if connection:
-            connection.rollback()
-        print(f"An error occurred: {e}")
-        return {
-            "statusCode": 500, 
-            "headers": CORS_HEADERS,
-            "body": json.dumps({"error": str(e)})
-        }
+        print(f"[Authorizer] Error: {e}")
+        return generate_policy(
+            principal_id="anonymous",
+            effect="Deny",
+            resource=event["methodArn"],
+            reason=f"Internal error: {str(e)}"
+        )
+
     finally:
-        # 사용이 끝나면 커넥션을 풀에 '반납'
         if connection and connection.is_connected():
             if cursor:
                 cursor.close()
             connection.close()
+
+
+def generate_policy(principal_id, effect, resource, reason="", extra_context=None):
+    context = {"reason": reason}
+    if extra_context:
+        context.update(extra_context)
+
+    policy = {
+        "principalId": principal_id,
+        "policyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Action": "execute-api:Invoke",
+                    "Effect": effect,
+                    "Resource": resource
+                }
+            ]
+        },
+        "context": context
+    }
+    return policy
