@@ -1,0 +1,96 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'lambda-squirrel-user'
+
+Parameters:
+  DBHost:
+    Type: String
+  DBUser:
+    Type: String
+  DBPassword:
+    Type: String
+  DBName:
+    Type: String
+
+Globals:
+  Function:
+    Timeout: 30
+    Environment:
+      Variables:
+        DB_HOST: !Ref DBHost
+        DB_USER: !Ref DBUser
+        DB_PASSWORD: !Ref DBPassword
+        DB_NAME: !Ref DBName
+
+Resources:
+  # --- API Gateway 정의 ---
+  LambdaSquirrelApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Auth:
+        # 이 API의 모든 엔드포인트에 기본으로 적용할 Authorizer를 지정합니다.
+        DefaultAuthorizer: LambdaRequestAuthorizer
+        Authorizers:
+          LambdaRequestAuthorizer:
+            FunctionArn: !GetAtt AuthorizerFunction.Arn
+            FunctionPayloadType: REQUEST
+            Identity:
+              Headers:
+                - uuid
+
+  # --- 데이터베이스 연동 레이어 ---
+  DatabaseLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: ./common/python
+      CompatibleRuntimes:
+        - python3.12
+    Metadata:
+      BuildMethod: python3.12
+      BuildProperties:
+        PIP_REQUIREMENTS: requirements.txt
+
+  # --- Authorizer Lambda 함수 ---
+  AuthorizerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: authorizer/
+      Handler: authorizer.lambda_handler
+      Runtime: python3.12
+      Layers:
+        - !Ref DatabaseLayer
+
+  # --- 회원가입 함수 (Authorizer 제외) ---
+  SignUpFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: signUpFunction/
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.12
+      Layers:
+        - !Ref DatabaseLayer
+      Events:
+        SignUpApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref LambdaSquirrelApi
+            Path: /signUp
+            Method: post
+            Auth:
+              Authorizer: NONE # 이 엔드포인트는 Authorizer 검사를 하지 않도록 설정
+
+  # --- 테스트 함수 (기본 Authorizer 적용) ---
+  TestGetFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: testFunction/
+      Handler: app.lambda_handler
+      Runtime: python3.12
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref LambdaSquirrelApi
+            Path: /test
+            Method: get
