@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>LinkBig WebSocket API 문서</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { margin: 0; background: #f9fafb; font-family: system-ui, sans-serif; }
+    header {
+      background: #111827; color: #fff; padding: 1rem 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    header a { color: #60a5fa; text-decoration: none; }
+    header a:hover { text-decoration: underline; }
+    iframe {
+      width: 100%;
+      height: calc(100vh - 64px);
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>🔌 LinkBig Short-Form WebSocket API</div>
+    <nav>
+      <a href="api.html">📘 REST API 보기</a>
+    </nav>
+  </header>
+
+  <!-- ✅ AsyncAPI 공식 뷰어를 iframe으로 로드 -->
+  <iframe
+    src="https://playground.asyncapi.io/?url=https://junyoung011019.github.io/squirrel/docs/short-form-ws.yaml"
+    title="AsyncAPI Viewer"
+  ></iframe>
+</body>
+</html>

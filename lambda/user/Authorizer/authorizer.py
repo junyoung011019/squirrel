@@ -5,18 +5,9 @@ from db import get_connection
 def lambda_handler(event, context):
 
     db_host_value = os.environ.get("DB_HOST", "NOT_FOUND")
-    print(f"DEBUG: Lambda is reading DB_HOST as: {db_host_value}")
-    
-    if db_host_value == "DB_HOST" or db_host_value == "NOT_FOUND":
-        print("ERROR: DB_HOST environment variable was not correctly loaded from env.json.")
-        # 이 시점에서 오류를 발생시켜 문제가 환경 변수 주입 때문임을 확인
-        raise Exception(f"Failed to load DB_HOST. Value: {db_host_value}")
-    
-    print("Event received by authorizer:", json.dumps(event))
 
     headers = event.get("headers", {}) or {}
     lower_case_headers = {k.lower(): v for k, v in headers.items()}
-    # 이제 대소문자 걱정 없이 소문자로 값을 찾음
     user_uuid = lower_case_headers.get("uuid")
 
     if not user_uuid:
